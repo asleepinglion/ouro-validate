@@ -29,11 +29,39 @@ module.exports = SuperJS.Class.extend({
 
   rules: {
 
-    required: "The value is required and must not be empty or null.",
+    date: "The value must be a valid date.",
+
+    email: "The value must be a valid e-mail address.",
 
     empty: "The value must be empty.",
 
-    json: "The value must be valid JSON."
+    float: "The value must be a float value.",
+
+    in: "The value must be in a set of values.",
+
+    integer: "The value must be an integer.",
+
+    json: "The value must be valid JSON.",
+
+    len: "The value must have a length between the specified amount of characters.",
+
+    lowercase: "The value must be all lowercase characters.",
+
+    max: "The value must be less than this amount.",
+
+    maxLength: "The value can have this many characters.",
+
+    min: "The value must be greater than this amount.",
+
+    minLength: "The value can have a minimum of this many characters.",
+
+    required: "The value is required and must not be empty or null.",
+
+    string: "The value must be a string.",
+
+    text: "The value must be text.",
+
+    url: "The value must be a valid URL."
 
   },
 
@@ -110,19 +138,57 @@ module.exports = SuperJS.Class.extend({
       });
   },
 
-  empty: function(x) {
 
-    if( _.isEmpty(x) ) {
-      return true;
-    } else {
+
+
+
+  date: validator.isDate,
+
+  email: validator.isEmail,
+
+  empty: _.isEmpty,
+
+  float: validator.isFloat,
+
+  in: validator.isIn,
+
+  integer: validator.isInt,
+
+  json: function(x) {
+    try {
+      JSON.parse(x);
+    } catch (e) {
       return false;
     }
+    return true;
+  },
 
+  len: function(x, min, max){
+    return validator.len(x, min, max);
+  },
+
+  lowercase: validator.isLowercase,
+
+  max: function (x, val) {
+    var number = parseFloat(x);
+    return isNaN(number) || number <= val;
+  },
+
+  maxLength: function(x, max) {
+    return validator.isLength(x, 0, max);
+  },
+
+  min: function(x, val) {
+    var number = parseFloat(x);
+    return isNaN(number) || number >= val;
+  },
+
+  minLength: function(x, min) {
+    return validator.isLength(x, min);
   },
 
   //todo: review code and possibly rewrite to simplify...
   required: function (x) {
-
     // Transform data to work properly with node validator
     if (!x && x !== 0) {
       x = '';
@@ -132,7 +198,6 @@ module.exports = SuperJS.Class.extend({
     else {
       x = '' + x;
     }
-
     if( validator.isNull(x) ) {
       return false;
     } else {
@@ -141,18 +206,12 @@ module.exports = SuperJS.Class.extend({
 
   },
 
-  json: function(x) {
+  string: _.isString,
 
-    try {
-      JSON.parse(x);
-    } catch (e) {
-      return false;
-    }
-    return true;
-  },
+  text: _.isText,
 
-  maxLength: function(x, max) {
-    return validator.isLength(x, 0, max);
+  url: function(x, val) {
+    return validator.isURL(x, val === true ? undefined : val);
   }
 
-});
+  });
