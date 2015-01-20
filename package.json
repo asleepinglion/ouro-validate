@@ -4,13 +4,13 @@
     "name": "Aaron Storck",
     "email": "aaronstorck@gmail.com"
   },
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "SuperJS Validate - Validation library with promised-based execution.",
   "main": "index.js",
   "repository": "https://github.com/asleepinglion/superjs-validate",
   "dependencies": {
     "bluebird": "^2.8.1",
-    "superjs": "^0.2.1",
+    "superjs": "*",
     "underscore": "^1.7.0",
     "validator": "^3.27.0"
   },
