@@ -1,6 +1,8 @@
 
 /**
- * Validations can be enabled for model attributes or controller action parameters.
+ * Validations return true or false depending on whether they pass or fail. In addition to 
+ * the validations, the library provides a mechanism to setup and process a group of validations
+ * using the bluebird Promise Library.
  *
  * @exports Validate
  * @namespace SuperJS.Validator
@@ -9,7 +11,7 @@
  */
 
 /**
- * Some of the methods have been copied from Sails' underlying validation system `anchor`,
+ * Some of the methods have been copied from the Sails project's validation system `anchor`,
  * Copyright © 2012- Mike McNeil.
  */
 
