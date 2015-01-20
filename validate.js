@@ -1,11 +1,11 @@
 
 /**
- * Validations return true or false depending on whether they pass or fail. In addition to 
+ * Validations return true or false depending on whether they pass or fail. In addition to
  * the validations, the library provides a mechanism to setup and process a group of validations
  * using the bluebird Promise Library.
  *
  * @exports Validate
- * @namespace SuperJS.Validator
+ * @namespace SuperJS.Validate
  * @extends SuperJS.Class
  *
  */
