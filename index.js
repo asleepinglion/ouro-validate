@@ -16,7 +16,7 @@ YSS'      YSSP~YSSY    S*S           YSSP  S*S    SSS  YSSY    YSS'
                        SP                  SP
                        Y                   Y
 
-SuperJS Validator - Validate & Sanitize Input
+SuperJS Validate - Extendable Validation Library
  */
 
 module.exports = require('./validate');

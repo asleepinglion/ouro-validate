@@ -1,0 +1,16 @@
+{
+  "name": "superjs-validate",
+  "author": {
+    "name": "Aaron Storck",
+    "email": "aaronstorck@gmail.com"
+  },
+  "version": "0.2.0",
+  "description": "SuperJS Validate - Validation library with promised-based execution.",
+  "main": "index.js",
+  "repository": "https://github.com/asleepinglion/superjs-validate",
+  "dependencies": {
+    "underscore": "^1.7.0",
+    "validator": "^3.27.0"
+  },
+  "license": "MIT"
+}
