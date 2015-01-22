@@ -30,40 +30,28 @@ module.exports = SuperJS.Class.extend({
   rules: {
 
     date: "The value must be a valid date.",
-
     email: "The value must be a valid e-mail address.",
-
     empty: "The value must be empty.",
-
     float: "The value must be a float value.",
-
     in: "The value must be in a set of values.",
-
     integer: "The value must be an integer.",
-
     json: "The value must be valid JSON.",
-
     len: "The value must have a length between the specified amount of characters.",
-
     lowercase: "The value must be all lowercase characters.",
-
     max: "The value must be less than this amount.",
-
     maxLength: "The value can have this many characters.",
-
     min: "The value must be greater than this amount.",
-
     minLength: "The value can have a minimum of this many characters.",
-
+    object: "The value must be an object.",
     required: "The value is required and must not be empty or null.",
-
     string: "The value must be a string.",
-
     text: "The value must be text.",
-
     url: "The value must be a valid URL."
 
   },
+
+  //todo: add underscore prefix or move validations into an object namespace to prevent
+  //the setup or process methods from being used as validations
 
   //setup validations for the given property by creating an array of closures
   //which contain promises to validate
@@ -76,9 +64,9 @@ module.exports = SuperJS.Class.extend({
     var list = [];
 
     //loop through validations asynchronously
-    Object.keys(validations).map(function( options, index ){
+    Object.keys(validations).map(function(validation, index ){
 
-      var validation = Object.keys(validations)[index];
+      var options = validations[validation];
 
       list.push(function() {
 
@@ -87,7 +75,7 @@ module.exports = SuperJS.Class.extend({
           if( self[validation](value,options) ) {
             resolve();
           } else {
-            reject({property: propertyName, rule: validation, description: self.rules[validation]});
+            reject({property: propertyName, value: value, rule: validation, options: options, description: self.rules[validation]});
           }
 
         });
@@ -138,10 +126,6 @@ module.exports = SuperJS.Class.extend({
       });
   },
 
-
-
-
-
   date: validator.isDate,
 
   email: validator.isEmail,
@@ -185,6 +169,16 @@ module.exports = SuperJS.Class.extend({
 
   minLength: function(x, min) {
     return validator.isLength(x, min);
+  },
+
+  object: function(x) {
+
+    if( (typeof x === 'object') && (x !== null ) ) {
+      return true;
+    } else {
+      return false;
+    }
+
   },
 
   //todo: review code and possibly rewrite to simplify...
