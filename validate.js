@@ -28,7 +28,7 @@ var Promise = require('bluebird');
 
 module.exports = SuperJS.Class.extend({
 
-  rules: {
+  validations: {
 
     creditCard: "The value must be a valid credit card number.",
     date: "The value must be a valid date.",
@@ -62,7 +62,7 @@ module.exports = SuperJS.Class.extend({
 
   //setup validations for the given property by creating an array of closures
   //which contain promises to validate
-  setup: function(validations, propertyName, value) {
+  setup: function(validations, propertyName, value, contextName) {
 
     //maintain reference to instance
     var self = this;
@@ -82,7 +82,21 @@ module.exports = SuperJS.Class.extend({
           if( self[validation](value,options) ) {
             resolve();
           } else {
-            reject({property: propertyName, value: value, rule: validation, options: options, description: self.rules[validation]});
+
+            var response = {};
+
+
+            if( contextName ) {
+              response[contextName] = propertyName;
+            } else {
+              response.property = propertyName;
+            }
+            response.value = value;
+            response.validation = validation;
+            response.options = options;
+            response.description = self.validations[validation];
+
+            reject(response);
           }
 
         });
@@ -167,7 +181,7 @@ module.exports = SuperJS.Class.extend({
   },
 
   len: function(x, min, max){
-    return validator.len(x, min, max);
+    return validator.isLength(x, min, max);
   },
 
   longitude: function(x){
