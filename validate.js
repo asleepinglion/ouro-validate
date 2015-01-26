@@ -23,28 +23,35 @@ var _ = require('underscore');
 var validator = require('validator');
 var Promise = require('bluebird');
 
+
 //todo: move rule descrptions to blueprint?
 
 module.exports = SuperJS.Class.extend({
 
   rules: {
 
+    creditCard: "The value must be a valid credit card number.",
     date: "The value must be a valid date.",
     email: "The value must be a valid e-mail address.",
     empty: "The value must be empty.",
     float: "The value must be a float value.",
+    folderName: "The value must be in folder name format.",
     in: "The value must be in a set of values.",
     integer: "The value must be an integer.",
     json: "The value must be valid JSON.",
+    latitude: "The value must be a valid latitude.",
     len: "The value must have a length between the specified amount of characters.",
+    longitude: "The value must be a valid longitude.",
     lowercase: "The value must be all lowercase characters.",
     max: "The value must be less than this amount.",
     maxLength: "The value can have this many characters.",
     min: "The value must be greater than this amount.",
     minLength: "The value can have a minimum of this many characters.",
+    notEmpty: "The value cannot be empty.",
     object: "The value must be an object.",
     required: "The value is required and must not be empty or null.",
     string: "The value must be a string.",
+    subdomain: "The value must be a valid subdomain.",
     text: "The value must be text.",
     url: "The value must be a valid URL."
 
@@ -126,13 +133,21 @@ module.exports = SuperJS.Class.extend({
       });
   },
 
+  creditCard: validator.isCreditCard,
+
   date: validator.isDate,
+
+  datetime: validator.isDate,
 
   email: validator.isEmail,
 
   empty: _.isEmpty,
 
   float: validator.isFloat,
+
+  folderName: function(x) {
+    return x.match(/^[a-zA-Z0-9-_]+$/);
+  },
 
   in: validator.isIn,
 
@@ -147,8 +162,16 @@ module.exports = SuperJS.Class.extend({
     return true;
   },
 
+  latitude:  function(x){
+    return x.match(/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/);
+  },
+
   len: function(x, min, max){
     return validator.len(x, min, max);
+  },
+
+  longitude: function(x){
+    return x.match(/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/);
   },
 
   lowercase: validator.isLowercase,
@@ -169,6 +192,15 @@ module.exports = SuperJS.Class.extend({
 
   minLength: function(x, min) {
     return validator.isLength(x, min);
+  },
+
+  notEmpty: function (x) {
+      // Transform data to work properly with node validator
+      if (!x) x = '';
+      else if (typeof x.toString !== 'undefined') x = x.toString();
+      else x = '' + x;
+
+      return !validator.isNull(x);
   },
 
   object: function(x) {
@@ -202,7 +234,11 @@ module.exports = SuperJS.Class.extend({
 
   string: _.isString,
 
-  text: _.isText,
+  subdomain: function(x) {
+    return x.match(/(?:[A-Za-z0-9][A-Za-z0-9\-]{0,61}[A-Za-z0-9]|[A-Za-z0-9])/);
+  },
+
+  text: _.isString,
 
   url: function(x, val) {
     return validator.isURL(x, val === true ? undefined : val);
