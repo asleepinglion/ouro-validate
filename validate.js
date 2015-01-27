@@ -146,7 +146,7 @@ module.exports = SuperJS.Class.extend({
   float: validator.isFloat,
 
   folderName: function(x) {
-    return x.match(/^[a-zA-Z0-9-_]+$/);
+    return /^[a-zA-Z0-9-_]+$/.test(x);
   },
 
   in: validator.isIn,
@@ -163,7 +163,7 @@ module.exports = SuperJS.Class.extend({
   },
 
   latitude:  function(x){
-    return x.match(/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/);
+    return /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/.test(x);
   },
 
   len: function(x, min, max){
@@ -171,7 +171,7 @@ module.exports = SuperJS.Class.extend({
   },
 
   longitude: function(x){
-    return x.match(/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/);
+    return /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/.test(x);
   },
 
   lowercase: validator.isLowercase,
@@ -235,7 +235,7 @@ module.exports = SuperJS.Class.extend({
   string: _.isString,
 
   subdomain: function(x) {
-    return x.match(/(?:[A-Za-z0-9][A-Za-z0-9\-]{0,61}[A-Za-z0-9]|[A-Za-z0-9])/);
+    return /(?:[A-Za-z0-9][A-Za-z0-9\-]{0,61}[A-Za-z0-9]|[A-Za-z0-9])/.test(x);
   },
 
   text: _.isString,
@@ -245,3 +245,4 @@ module.exports = SuperJS.Class.extend({
   }
 
   });
+
