@@ -28,6 +28,17 @@ var Promise = require('bluebird');
 
 module.exports = SuperJS.Class.extend({
 
+  init: function(app) {
+
+    if( app && app.config && app.config.server && app.config.server.validations ) {
+      this.config = app.config.server.validations;
+    }
+
+    this.config = (typeof this.config === 'object') ? this.config : {};
+    this.config.executeAll = (this.config.executeAll) ? true : false;
+
+  },
+  
   validations: {
 
     creditCard: "The value must be a valid credit card number.",
@@ -70,6 +81,11 @@ module.exports = SuperJS.Class.extend({
     //maintain list of closures
     var list = [];
 
+    //default context name to property
+    if( !contextName ) {
+      contextName = 'property';
+    }
+
     //loop through validations asynchronously
     Object.keys(validations).map(function(validation, index ){
 
@@ -77,31 +93,40 @@ module.exports = SuperJS.Class.extend({
 
       list.push(function() {
 
-        return new Promise(function(resolve,reject) {
+        var response = {};
 
-          if( self[validation](value,options) ) {
-            resolve();
-          } else {
+        response[contextName] = propertyName;
+        response.value = value;
+        response.validation = validation;
+        response.options = options;
+        response.description = self.validations[validation];
 
-            var response = {};
+        if( self.config.executeAll ) {
 
+          return new Promise(function (resolve, reject) {
 
-            if( contextName ) {
-              response[contextName] = propertyName;
+            console.log('executing validation:', contextName, propertyName, validation);
+
+            if (self[validation](value, options)) {
+              resolve();
             } else {
-              response.property = propertyName;
+              reject(response);
             }
-            response.value = value;
-            response.validation = validation;
-            response.options = options;
-            response.description = self.validations[validation];
 
-            reject(response);
+          });
+
+        } else {
+
+          if( self[validation](value, options) ) {
+            return true;
+          } else {
+            return response;
           }
 
-        });
+        }
 
       });
+
 
     });
 
@@ -117,34 +142,56 @@ module.exports = SuperJS.Class.extend({
     //maintain list of promises for all parameters of this request
     var validations = [];
 
-    //execute each closure and append each promise to the array
-    for( var closure in list ) {
-      validations.push(list[closure]());
-    }
+    if( self.config.executeAll ) {
 
-    //settle all validations and resolve with any exceptions
-    return Promise.settle(validations)
+      //execute each closure and append each promise to the array
+      for( var closure in list ) {
+        validations.push(list[closure]());
+      }
 
-      .then(function(results) {
+      //settle all validations and resolve with any exceptions
+      return Promise.settle(validations)
 
-        //maintain a list of exceptions
-        var exceptions = [];
+        .then(function (results) {
 
-        //loop over results and append any reject reasons
-        for( var result in results ) {
+          //maintain a list of exceptions
+          var exceptions = [];
 
-          if( results[result].isRejected() ) {
-            exceptions.push(results[result].reason());
+          //loop over results and append any reject reasons
+          for (var result in results) {
+
+            if (results[result].isRejected()) {
+              exceptions.push(results[result].reason());
+            }
+
           }
 
+          //if there were any exceptions throw an error
+          if (exceptions.length > 0) {
+            throw new SuperJS.Error('validation_error', 422, 'One or more validation errors occurred processing the request.', {exceptions: exceptions});
+          }
+
+        });
+
+    } else {
+
+      return new Promise(function(resolve, reject) {
+        for( var validation in list ) {
+
+          var response = list[validation]();
+
+          if( response !== true) {
+            reject(new SuperJS.Error('validation_error', 422, 'A validation error occurred processing the request.', {exceptions: [response]}));
+
+          }
         }
 
-        //if there were any exceptions throw an error
-        if( exceptions.length > 0 ) {
-          throw new SuperJS.Error('validation_error', 422, 'One or more validation errors occurred processing the request.', {exceptions: exceptions});
-        }
+        resolve();
 
       });
+
+    }
+
   },
 
   creditCard: validator.isCreditCard,
