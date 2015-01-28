@@ -42,6 +42,7 @@ module.exports = SuperJS.Class.extend({
 
     creditCard: "The value must be a valid credit card number.",
     date: "The value must be a valid date.",
+    datetime: "The value must be a valid date.",
     email: "The value must be a valid e-mail address.",
     empty: "The value must be empty.",
     float: "The value must be a float value.",
