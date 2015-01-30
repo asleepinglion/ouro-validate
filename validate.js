@@ -255,8 +255,12 @@ module.exports = SuperJS.Class.extend({
     return /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/.test(x);
   },
 
-  len: function(x, min, max){
-    return validator.isLength(x, min, max);
+  /*len: function(x, min, max){ //todo: how do we pass two values?
+   return validator.isLength(x, min, max);
+   },*/
+
+  len: function(x, length){ //todo: changed to handle single value
+    return validator.isLength(x, length, length);
   },
 
   longitude: function(x){
