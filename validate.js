@@ -73,7 +73,7 @@ module.exports = SuperJS.Class.extend({
 
   //setup validations for the given property by creating an array of closures
   //which contain promises to validate
-  setup: function(validations, propertyName, value, contextName) {
+  setup: function(validations, context, propertyName, contextName) {
 
     //maintain reference to instance
     var self = this;
@@ -96,7 +96,7 @@ module.exports = SuperJS.Class.extend({
         var response = {};
 
         response[contextName] = propertyName;
-        response.value = value;
+        response.value = context[propertyName];
         response.validation = validation;
         response.options = options;
         response.description = self.validations[validation];
@@ -105,9 +105,9 @@ module.exports = SuperJS.Class.extend({
 
           return new Promise(function (resolve, reject) {
 
-            console.log('executing validation:', contextName, propertyName, validation);
+            console.log(':: executing validation:', JSON.stringify({context: contextName, property: propertyName, validation: validation}));
 
-            if (self[validation](value, options)) {
+            if (self[validation](context[propertyName], options)) {
               resolve();
             } else {
               reject(response);
@@ -117,9 +117,8 @@ module.exports = SuperJS.Class.extend({
 
         } else {
 
-          console.log('executing validation:', contextName, propertyName, validation);
-
-          if( self[validation](value, options) ) {
+          console.log(':: executing validation:', JSON.stringify({context: contextName, property: propertyName, validation: validation}));
+          if( self[validation](context[propertyName], options) ) {
             return true;
           } else {
             return response;
@@ -337,5 +336,5 @@ module.exports = SuperJS.Class.extend({
     return validator.isURL(x, val === true ? undefined : val);
   }
 
-  });
+});
 
