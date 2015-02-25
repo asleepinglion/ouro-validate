@@ -98,7 +98,11 @@ module.exports = SuperJS.Class.extend({
         response[contextName] = propertyName;
         response.value = context[propertyName];
         response.validation = validation;
-        response.options = options;
+
+        if( response.options !== true ) {
+          response.options = options;
+        }
+
         response.description = self.validations[validation];
 
         if( self.config.executeAll && self.config.async ) {
