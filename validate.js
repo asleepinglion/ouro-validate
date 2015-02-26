@@ -99,7 +99,7 @@ module.exports = SuperJS.Class.extend({
         response.value = context[propertyName];
         response.validation = validation;
 
-        if( response.options !== true ) {
+        if( options !== true ) {
           response.options = options;
         }
 
