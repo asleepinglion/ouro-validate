@@ -5,7 +5,7 @@
     "email": "aaronstorck@gmail.com"
   },
   "version": "0.8.5",
-  "description": "SuperJS Validate - Validation library with promised-based execution.",
+  "description": "A validation library with promised-based execution for SuperJS.",
   "main": "index.js",
   "repository": "https://github.com/asleepinglion/superjs-validate",
   "dependencies": {
