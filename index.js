@@ -19,4 +19,5 @@ YSS'      YSSP~YSSY    S*S           YSSP  S*S    SSS  YSSY    YSS'
 SuperJS Validate - Extendable Validation Library
  */
 
-module.exports = require('./lib/validate/class');
+module.exports.Validate = require('./lib/validate/class');
+module.exports.Rules = require('./lib/rules/class');
