@@ -1,17 +1,17 @@
 {
-  "name": "superjs-validate",
+  "name": "ouro-validate",
   "author": {
     "name": "Aaron Storck",
     "email": "aaronstorck@gmail.com"
   },
-  "version": "0.8.6",
-  "description": "A validation library with promised-based execution for SuperJS.",
+  "version": "0.9.0",
+  "description": "A validation library with promised-based execution for Ouro.",
   "main": "index.js",
-  "repository": "https://github.com/asleepinglion/superjs-validate",
+  "repository": "https://github.com/asleepinglion/ouro-validate",
   "dependencies": {
     "bluebird": "*",
-    "superjs": "*",
-    "superjs-base": "*",
+    "ouro": "*",
+    "ouro-base": "*",
     "underscore": "*",
     "validator": "*"
   },
